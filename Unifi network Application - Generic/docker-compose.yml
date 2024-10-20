@@ -22,6 +22,8 @@ services:
     networks:
      - unifi-bridge
     privileged: false
+
+
   unifi-network-application:
     container_name: unifi-network-application
     depends_on:
@@ -39,37 +41,19 @@ services:
       - TZ=Etc/UTC
     image: lscr.io/linuxserver/unifi-network-application:latest
     ports:
-      - target: 8443
-        published: "8443"
-        protocol: tcp
-      - target: 3478
-        published: "3478"
-        protocol: udp
-      - target: 10001
-        published: "10001"
-        protocol: udp
-      - target: 8080
-        published: "8080"
-        protocol: tcp
-      - target: 1900 #optional
-        published: "1900"
-        protocol: udp
-      - target: 8843 #optional
-        published: "8843"
-        protocol: tcp
-      - target: 8880 #optional
-        published: "8880"
-        protocol: tcp
-      - target: 6789 #optional
-        published: "6789"
-        protocol: tcp
-      - target: 5514 #optional
-        published: "5514"
-        protocol: udp
+      - "4478:3478/udp"   # STUN
+      - "10001:10001/udp" # Device discovery
+      - "9080:8080"       # HTTP portal redirection
+      - "7443:8443"       # HTTPS web interface
+      - "1914:1900/udp"   # UPnP
+      - "7553:8843"       # HTTPS guest portal
+      - "9880:8880"       # HTTP guest portal
+      - "6789:6789"       # Speed test server
+      - "5514:5514/udp"   # Syslog
     restart: unless-stopped
     volumes:
       - type: bind
-        source: /CHOOSE-A-PATH/unifi-network-application
+        source: /config/unifi-network-application
         target: /config
     networks:
      - unifi-bridge
