@@ -7,9 +7,9 @@ services:
       - source: init-mongo.js
         target: /docker-entrypoint-initdb.d/init-mongo.js
     environment:
-      - PGID=1000
-      - PUID=1000
-      - TZ=Etc/UTC
+      - PGID=0
+      - PUID=998
+      - TZ=Europe/Amsterdam
     ports:
       - target: 27017
         published: "27017"
@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
     volumes:
       - type: bind
-        source: /CHOOSE-A-PATH/unifi-db
+        source: /config/mongodb/unifi-db
         target: /data/db
     networks:
      - unifi-bridge
